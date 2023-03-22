@@ -17,19 +17,19 @@ Lrujs is a fast and lightweight least-recently-used cache for [Node.js](http://n
 Install using npm:
 
 ```console
-$ npm i lrujs
+$ npm i @opensnip/lrujs
 ```
 
 Install using yarn:
 
 ```console
-$ yarn add lrujs
+$ yarn add @opensnip/lrujs
 ```
 
 ## Example
 
 ```js
-const LRUCache = require("lrujs");
+const LRUCache = require("@opensnip/lrujs");
 
 // Create cache object
 const cache = new LRUCache();
@@ -62,7 +62,7 @@ Lrujs is also support TTL, but it is not a TTL cache, and does not make strong T
 #### Create a cache object:
 
 ```js
-const LRUCache = require("lrujs");
+const LRUCache = require("@opensnip/lrujs");
 
 // Create cache object
 const cache = new LRUCache({
@@ -155,9 +155,9 @@ cache.forEach(function (data) {
 
 [MIT License](https://github.com/opensnip/lrujs/blob/main/LICENSE)
 
-[npm-downloads-image]: https://badgen.net/npm/dm/lrujs
-[npm-downloads-url]: https://npmcharts.com/compare/lrujs?minimal=true
-[npm-install-size-image]: https://badgen.net/packagephobia/install/lrujs
-[npm-install-size-url]: https://packagephobia.com/result?p=lrujs
-[npm-url]: https://npmjs.org/package/lrujs
-[npm-version-image]: https://badgen.net/npm/v/lrujs
+[npm-downloads-image]: https://badgen.net/npm/dm/@opensnip/lrujs
+[npm-downloads-url]: https://npmcharts.com/compare/@opensnip/lrujs?minimal=true
+[npm-install-size-image]: https://badgen.net/packagephobia/install/@opensnip/lrujs
+[npm-install-size-url]: https://packagephobia.com/result?p=@opensnip/lrujs
+[npm-url]: https://npmjs.org/package/@opensnip/lrujs
+[npm-version-image]: https://badgen.net/npm/v/@opensnip/lrujs
