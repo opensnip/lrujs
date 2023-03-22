@@ -153,7 +153,7 @@ cache.forEach(function (data) {
 
 ## License
 
-[MIT License](https://github.com/routejs/router/blob/main/LICENSE)
+[MIT License](https://github.com/opensnip/lrujs/blob/main/LICENSE)
 
 [npm-downloads-image]: https://badgen.net/npm/dm/lrujs
 [npm-downloads-url]: https://npmcharts.com/compare/lrujs?minimal=true
