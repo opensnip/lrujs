@@ -4,7 +4,14 @@
 [![NPM Install Size][npm-install-size-image]][npm-install-size-url]
 [![NPM Downloads][npm-downloads-image]][npm-downloads-url]
 
-Lrujs is a fast and lightweight least-recently-used cache for [Node.js](http://nodejs.org)
+Lrujs is a fast and lightweight lru (least-recently-used) caching library for javascript.
+
+A LRU (least-recently-used) cache will automatically removes the least recently used data from cache when a new data is added to the cache and cache is full.
+
+Lrujs support TTL (Time to live) and max cache size feature.
+The default value for maxSize is 1000 and TTL is 0 milliseconds (0 means permanently), if you not set the max cache size and ttl then the default values are used.
+
+Lrujs is also support TTL, but it is not a TTL cache, and does not make strong TTL guarantees. Lrujs will not automatically removes the expired items, but you can set a default TTL on the cache or on a single value. If you do so, it will treat expired items as missing, and delete them when they are fetched. You can set TTL in milliseconds.
 
 ## Features
 
@@ -52,14 +59,7 @@ cache.forEach(function (data) {
 });
 ```
 
-## Introduction
-
-Lrujs is a fast and lightweight caching library for javascript, lrujs support TTL (Time to live) and max cache size feature.
-The default value for maxSize is 1000 and TTL is 0 milliseconds (0 means permanently), if you not set the max cache size and ttl then the default values are used.
-
-Lrujs is also support TTL, but it is not a TTL cache, and does not make strong TTL guarantees. Lrujs will not automatically removes the expired items, but you can set a default TTL on the cache or on a single value. If you do so, it will treat expired items as missing, and delete them when they are fetched. You can set TTL in milliseconds.
-
-#### Create a cache object:
+## Create a new cache object
 
 ```js
 const LRUCache = require("@opensnip/lrujs");
@@ -71,7 +71,7 @@ const cache = new LRUCache({
 });
 ```
 
-#### Set a new data:
+## Set a new data
 
 In lrujs any value (both objects and primitive values) may be used as either a key or a value.
 
@@ -83,7 +83,7 @@ cache.set("a", 10);
 cache.set("b", 10, { ttl: 200 }); // Expires after 200 ms
 ```
 
-#### Get data:
+## Get data from cache
 
 ```js
 // Add new data in cache
@@ -103,18 +103,18 @@ cache.get("a"); // undefined
 cache.get("b"); // undefined
 
 // Set return value of get function
-cache.get("a", function (err, data) {
+cache.get("a", function (err, value) {
   if (err) return null;
-  return data;
+  return value;
 }); // undefined
 
-cache.get("b", function (err, data) {
+cache.get("b", function (err, value) {
   if (err) return null;
-  return data;
+  return value;
 }); // null
 ```
 
-#### Check data exists in cache
+## Check data exists in cache
 
 ```js
 // Add new data in cache
@@ -125,21 +125,21 @@ cache.has("a"); // true
 cache.has("b"); // false
 ```
 
-#### Delete data:
+## Delete data from cache
 
 ```js
 // Delete data
 cache.delete("a");
 ```
 
-#### Delete all data from cache:
+## Delete all data from cache
 
 ```js
 // Delete all data
 cache.clear();
 ```
 
-#### Get all data from cache:
+## Get all data from cache
 
 ```js
 // Add new data in cache
