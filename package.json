@@ -1,6 +1,6 @@
 {
   "name": "@opensnip/lrujs",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Fast and lightweight lru cache for javascript",
   "main": "index.mjs",
   "type": "module",
