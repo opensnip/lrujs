@@ -9,7 +9,7 @@ Lrujs is a fast and lightweight lru (least-recently-used) caching library for ja
 In LRU (least-recently-used) cache, when new data is added and if cache if full, it will automatically removes the least recently used data from cache and insert the new data in the cache.
 
 Lrujs support TTL (Time to live) and max cache size feature.
-The default value for maxSize is 1000 and TTL is 0 milliseconds (0 means permanently), if you not set the max cache size and ttl then the default values are used.
+The default value for maxSize is 1000 and for TTL is 0 milliseconds (0 means permanently), if you will not set the max cache size and ttl then default values will be used.
 
 Lrujs support TTL, but it is not a TTL cache, and also does not make strong TTL guarantees. Lrujs will not removes the expired items from cache periodically, but you can set the default TTL on cache or on a single value. If you do so, it will treat expired items as missing, and delete them when they are fetched.
 
@@ -18,6 +18,7 @@ Lrujs support TTL, but it is not a TTL cache, and also does not make strong TTL 
 - Super Fast
 - Lightweight
 - TTL support
+- Customised return value
 
 ## Installation
 
