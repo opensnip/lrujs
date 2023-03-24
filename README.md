@@ -71,10 +71,10 @@ const cache = new Cache(options);
 ```
 
 Where options are the following:
-- `maxLength`: max length is a cache max length, max length is a positive integer value. The default value is 0, if the value is 0 then it will not check the max length.
-- `ttl` is cache expires time in milliseconds, the default value is 0 and if value if 0 it will not check the ttl.
-- `interval`: interval is the time interval in milliseconds, after every interval all the expired values are automatically removed. Default value is 0 and if value is 0 the it will not removes expired values automatically, but don't worry expired items are treated as missing, and deleted when they are fetched.
-- `enableInterval`: enableInterval is a boolean value that is used to enable and disable the interval, the default value is false and if value is explicitly set false then it will not run the interval even if the interval time is set.
+- `maxLength` : max length is a cache max length, max length is a positive integer value. The default value is 0, if the value is 0 then it will not check the max length.
+- `ttl` : is cache expires time in milliseconds, the default value is 0 and if value if 0 it will not check the ttl.
+- `interval` : interval is the time interval in milliseconds, after every interval all the expired values are automatically removed. Default value is 0 and if value is 0 the it will not removes expired values automatically, but don't worry expired items are treated as missing, and deleted when they are fetched.
+- `enableInterval` : enableInterval is a boolean value that is used to enable and disable the interval, the default value is false and if value is explicitly set false then it will not run the interval even if the interval time is set.
 
 Lrujs support TTL, but it is not a TTL cache, and also does not make strong TTL guarantees. When interval is set expired values are removed from cache periodically.
 
