@@ -6,19 +6,12 @@
 
 Lrujs is a fast and lightweight lru (least-recently-used) caching library for javascript.
 
-In LRU (least-recently-used) cache, when new data is added and if cache if full, it will automatically removes the least recently used data from cache and insert the new data in the cache.
-
-Lrujs support TTL (Time to live) and max cache size feature.
-The default value for maxSize is 1000 and for TTL is 0 milliseconds (0 means permanently), if you will not set the max cache size and ttl then default values will be used.
-
-Lrujs support TTL, but it is not a TTL cache, and also does not make strong TTL guarantees. Lrujs will not removes the expired items from cache periodically, but you can set the default TTL on cache or on a single value. If you do so, it will treat expired items as missing, and delete them when they are fetched.
-
 ## Features
 
 - Super Fast
 - Lightweight
 - TTL support
-- Customised return value
+- Custom cache-miss value
 
 ## Installation
 
@@ -39,10 +32,10 @@ $ yarn add @opensnip/lrujs
 A simple lru cache example:
 
 ```js
-const LRUCache = require("@opensnip/lrujs");
+const Cache = require("@opensnip/lrujs");
 
 // Create cache object
-const cache = new LRUCache();
+const cache = new Cache();
 
 // Add data in cache
 cache.set("a", 10);
@@ -55,8 +48,11 @@ console.log(cache.get("a"));
 
 // Get all data from cache
 cache.forEach(function (data) {
-  console.log(data);
+  console.log(data); // { a: 10 }
 });
+
+// Get all data to array
+console.log(cache.toArray());
 
 // Delete data from cache
 cache.delete("a");
@@ -67,36 +63,59 @@ cache.clear();
 
 ## Create a new cache object
 
-When we create a new cache we set the max cache size and ttl, but it is not mandatory.
+To create a new cache we need to create a new instance of lrujs. While creating a new cache we can set the configuration like cache max length and ttl, but it is not mandatory and if we not set any configuration then the default values are used.
 
+Defination:
 ```js
-const LRUCache = require("@opensnip/lrujs");
+const cache = new Cache(options);
+```
+
+Where options are the following:
+- `maxLength` is cache max length, max length is a positive integer value. The default value is 0, if the value is 0 then it will not check the max length.
+- `ttl` is cache expires time in milliseconds, the default value is 0 and if value if 0 it will not check the ttl.
+- `interval` is the time interval in milliseconds, after every interval all the expired values are automatically removed. Default value is 0 and if value is 0 the it will not removes expired values automatically, but don't worry expired items are treated as missing, and deleted when they are fetched.
+- `enableInterval` is boolean value that is used to enable and disable the interval, the default value is false and if value is explicitly set false then it will not run the interval even if the interval time is set.
+
+Lrujs support TTL, but it is not a TTL cache, and also does not make strong TTL guarantees. When interval is set expired values are removed from cache periodically.
+
+Example:
+```js
+const Cache = require("@opensnip/lrujs");
 
 // Create cache object
-const cache = new LRUCache({
-  maxSize: 10, // Optional
-  ttl: 100, // Optional
+const cache = new Cache({
+  maxLength: 10,
+  ttl: 100,
+  interval: 1000,
 });
 ```
 
 ## Set a new data
 
-In lrujs any value (both objects and primitive values) may be used as either a key or a value. If you set the duplicate item in the cache, then it will replace the old item.
-You can also set the TTL for a single item
+In lrujs any value (both objects and primitive values) may be used as either a key or a value, duplicate keys not allowed and if duplicate item is inserted it will be replaced by the new item.
+
 ```js
 // Add new data in cache
 cache.set("a", 10);
 
+// Add new data in cache
+cache.set("user", { name: "abc" });
+
 // Add duplicate data
 cache.set("a", 20); // Replace the old value
 
+## Set ttl for single data
+
+By default the configuration TTL value is used for every item, but we can set TTL for a single item.
+
+```js
 // Add new data in cache
 cache.set("b", 10, { ttl: 200 }); // Expires after 200 ms
 ```
 
 ## Get data from cache
 
-Access data from the cache, if data is not in the cache by default lrujs will return undefined value.
+By default on cache miss lrujs returns undefined value, but undefined is also can be used as value for items. In this case you can return a custom value on cache miss.
 
 ```js
 // Add new data in cache
@@ -106,7 +125,7 @@ cache.set("a", 10);
 cache.get("a"); // 10
 ```
 
-If key is not exists in the cache it will return the undefined value, but undefined also can be the value for a key for this kind of situation you can customise the return value of `cache.get` function or check data exists in the cache or not.
+Customize cache miss value:
 
 ```js
 // Add new data in cache
@@ -115,7 +134,7 @@ cache.set("a", undefined);
 cache.get("a"); // undefined
 cache.get("b"); // undefined
 
-// Set return value of get function
+// Set custom return value
 cache.get("a", function (err, value) {
   if (err) return null;
   return value;
@@ -129,7 +148,7 @@ cache.get("b", function (err, value) {
 
 ## Check data exists in cache
 
-Check weather data is exist in the cache or not.
+Check weather item exists in the cache or not.
 
 ```js
 // Add new data in cache
@@ -168,8 +187,24 @@ cache.set("a", 10);
 
 // Get all data
 cache.forEach(function (data) {
-  console.log(data); // {a: 10}
+  console.log(data); // { a: 10 }
 });
+
+// OR
+
+for (let data of cache) {
+  console.log(data); // { a: 10 }
+}
+```
+
+## Get data as array
+
+```js
+// Add new data in cache
+cache.set("a", 10);
+
+// Get all data
+console.log(cache.toArray()); // [ { a: 10 } ]
 ```
 
 ## License
