@@ -1,7 +1,7 @@
-const LinkedList = require("./linkedlist/index.cjs");
-const Node = require("./linkedlist/node.cjs");
+import LinkedList from "./linkedlist/index.mjs";
+import Node from "./linkedlist/node.mjs";
 
-module.exports = class Cache {
+export default class Cache {
   #linkedList = null;
   #cache = null;
   #config = {
@@ -255,4 +255,4 @@ module.exports = class Cache {
       node = next;
     }
   }
-};
+}
