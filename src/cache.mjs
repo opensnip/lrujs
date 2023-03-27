@@ -103,7 +103,7 @@ export default class Cache {
     // Insert a new node at head
     const existingNode = this.#cache.get(key);
     // Update node data if node is already exists
-    if (typeof existingNode !== undefined) {
+    if (typeof existingNode !== "undefined") {
       existingNode.value = nodeValue;
       // Move current node to the head
       this.#linkedList.setHead(existingNode);
@@ -126,7 +126,7 @@ export default class Cache {
 
       const node = this.#cache.get(key);
 
-      if (typeof node !== undefined) {
+      if (typeof node !== "undefined") {
         // Check node is live or not
         if (this.#isStale(node)) {
           this.delete(key);
@@ -156,7 +156,7 @@ export default class Cache {
   delete(key) {
     const node = this.#cache.get(key);
 
-    if (typeof node !== undefined) {
+    if (typeof node !== "undefined") {
       this.#linkedList.delete(node);
       // Delete node
       this.#cache.delete(key);
@@ -202,7 +202,7 @@ export default class Cache {
   has(key) {
     const node = this.#cache.get(key);
 
-    if (typeof node !== undefined) {
+    if (typeof node !== "undefined") {
       // Check node is live or not
       if (this.#isStale(node)) {
         this.delete(key);
