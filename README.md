@@ -97,7 +97,7 @@ const cache = new Cache({
 
 In lrujs any value (both objects and primitive values) may be used as either a key or a value, duplicate keys not allowed and if duplicate item is inserted it will be replaced by the new item.
 
-````js
+```js
 // Add new data in cache
 cache.set("a", 10);
 
@@ -106,6 +106,7 @@ cache.set("user", { name: "abc" });
 
 // Add duplicate data
 cache.set("a", 20); // Replace the old value
+```
 
 ## Set ttl for single data
 
@@ -114,7 +115,7 @@ By default the configuration TTL value is used for every item, but we can set TT
 ```js
 // Add new data in cache
 cache.set("b", 10, { ttl: 200 }); // Expires after 200 ms
-````
+```
 
 ## Get data from cache
 
