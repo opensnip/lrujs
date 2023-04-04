@@ -11,7 +11,7 @@ Lrujs is a fast and lightweight lru (least-recently-used) caching library for ja
 - Super Fast
 - Lightweight
 - TTL support
-- Custom cache-miss value
+- Handle cache-miss
 
 ## Installation
 
@@ -88,7 +88,7 @@ const Cache = require("@opensnip/lrujs");
 // Create cache object
 const cache = new Cache({
   maxLength: 10,
-  ttl: 100,
+  ttl: 1000,
   interval: 60000,
 });
 ```
@@ -129,7 +129,7 @@ cache.set("a", 10);
 cache.get("a"); // 10
 ```
 
-Customize cache miss value:
+Customize cache-miss value:
 
 ```js
 // Add new data in cache
