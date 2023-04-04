@@ -6,7 +6,7 @@ export default class Cache {
   #cache = null;
   #config = {
     ttl: 0,
-    maxLength: 250,
+    maxLength: 0,
     interval: 0,
     intervalId: null,
     enableInterval: false,
@@ -78,6 +78,7 @@ export default class Cache {
   }
 
   set(key, value, options = {}) {
+    // Insert a new node at head
     if (
       (typeof options.ttl !== "undefined" && typeof options.ttl !== "number") ||
       options.ttl < 0
@@ -100,10 +101,9 @@ export default class Cache {
       nodeValue.expiresAt = nodeValue.createdAt + nodeValue.ttl;
     }
 
-    // Insert a new node at head
-    const existingNode = this.#cache.get(key);
     // Update node data if node is already exists
-    if (typeof existingNode !== "undefined") {
+    if (this.#cache.has(key)) {
+      const existingNode = this.#cache.get(key);
       existingNode.value = nodeValue;
       // Move current node to the head
       this.#linkedList.setHead(existingNode);
@@ -124,13 +124,12 @@ export default class Cache {
         throw new TypeError("callback should be a function");
       }
 
-      const node = this.#cache.get(key);
-
-      if (typeof node !== "undefined") {
+      if (this.#cache.has(key)) {
+        const node = this.#cache.get(key);
         // Check node is live or not
         if (this.#isStale(node)) {
           this.delete(key);
-          throw new Error(key + " Key not found");
+          throw new Error(key + " key not found");
         }
 
         // Move current node to the head
@@ -143,7 +142,7 @@ export default class Cache {
         }
       }
 
-      throw new Error(key + " Key not found");
+      throw new Error(key + " key not found");
     } catch (err) {
       if (callback) {
         return callback(err, undefined);
@@ -154,9 +153,8 @@ export default class Cache {
   }
 
   delete(key) {
-    const node = this.#cache.get(key);
-
-    if (typeof node !== "undefined") {
+    if (this.#cache.has(key)) {
+      const node = this.#cache.get(key);
       this.#linkedList.delete(node);
       // Delete node
       this.#cache.delete(key);
@@ -164,7 +162,7 @@ export default class Cache {
   }
 
   #evict() {
-    if (this.#linkedList.tail === null) return;
+    if (this.length === 0) return;
     if (this.length !== this.#config.maxLength) return;
     this.delete(this.#linkedList.tail.value.key);
   }
@@ -200,9 +198,8 @@ export default class Cache {
   }
 
   has(key) {
-    const node = this.#cache.get(key);
-
-    if (typeof node !== "undefined") {
+    if (this.#cache.has(key)) {
+      const node = this.#cache.get(key);
       // Check node is live or not
       if (this.#isStale(node)) {
         this.delete(key);
@@ -246,13 +243,8 @@ export default class Cache {
 
   // Iterator to iterate over cache with a 'for...of' loop
   *[Symbol.iterator]() {
-    let node = this.#linkedList.head;
-    while (node) {
-      let next = node.next;
-      if (this.has(node.value.key)) {
-        yield { [node.value.key]: node.value.value };
-      }
-      node = next;
-    }
+    this.forEach(function (data) {
+      yield data;
+    });
   }
 }
