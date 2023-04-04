@@ -243,8 +243,13 @@ module.exports = class Cache {
 
   // Iterator to iterate over cache with a 'for...of' loop
   *[Symbol.iterator]() {
-    this.forEach(function (data) {
-      yield data;
-    });
+    let node = this.#linkedList.head;
+    while (node) {
+      let next = node.next;
+      if (this.has(node.value.key)) {
+        yield { [node.value.key]: node.value.value };
+      }
+      node = next;
+    }
   }
 };
