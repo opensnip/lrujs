@@ -1,5 +1,4 @@
 module.exports = class Cache {
-  #linkedList = null;
   #cache = null;
   #config = {
     ttl: 0,
