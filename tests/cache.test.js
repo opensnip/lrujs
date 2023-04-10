@@ -72,10 +72,10 @@ describe("LRU Cache test", () => {
     cache.set("d", 40);
     cache.set("e", 50);
     expect(cache.toArray()).toEqual([
-      { e: 50 },
-      { d: 40 },
-      { c: 30 },
       { b: 20 },
+      { c: 30 },
+      { d: 40 },
+      { e: 50 },
     ]);
   });
 
@@ -87,10 +87,10 @@ describe("LRU Cache test", () => {
     cache.get("a");
     cache.set("e", 50);
     expect(cache.toArray()).toEqual([
-      { e: 50 },
-      { a: 10 },
-      { d: 40 },
       { c: 30 },
+      { d: 40 },
+      { a: 10 },
+      { e: 50 },
     ]);
   });
 
@@ -102,10 +102,10 @@ describe("LRU Cache test", () => {
     cache.get("d");
     cache.set("e", 50);
     expect(cache.toArray()).toEqual([
-      { e: 50 },
-      { d: 40 },
-      { c: 30 },
       { b: 20 },
+      { c: 30 },
+      { d: 40 },
+      { e: 50 },
     ]);
   });
 
@@ -124,7 +124,7 @@ describe("LRU Cache test", () => {
   test("Get all data as array", async () => {
     cache.set("a", 10);
     cache.set("b", 20, { ttl: 0 });
-    expect(cache.toArray()).toEqual([{ b: 20 }, { a: 10 }]);
+    expect(cache.toArray()).toEqual([{ a: 10 }, { b: 20 }]);
     await new Promise((resolve, reject) => {
       setTimeout(() => resolve(), 200);
     });
