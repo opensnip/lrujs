@@ -71,7 +71,7 @@ describe("LRU Cache test", () => {
     cache.set("c", 30);
     cache.set("d", 40);
     cache.set("e", 50);
-    expect(cache.toArray()).toEqual([
+    expect(cache.toArray()).toMatchArray([
       { e: 50 },
       { d: 40 },
       { c: 30 },
@@ -86,7 +86,7 @@ describe("LRU Cache test", () => {
     cache.set("d", 40);
     cache.get("a");
     cache.set("e", 50);
-    expect(cache.toArray()).toEqual([
+    expect(cache.toArray()).toMatchArray([
       { e: 50 },
       { a: 10 },
       { d: 40 },
@@ -101,7 +101,7 @@ describe("LRU Cache test", () => {
     cache.set("d", 40);
     cache.get("d");
     cache.set("e", 50);
-    expect(cache.toArray()).toEqual([
+    expect(cache.toArray()).toMatchArray([
       { e: 50 },
       { d: 40 },
       { c: 30 },
