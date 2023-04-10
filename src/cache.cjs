@@ -216,7 +216,7 @@ module.exports = class Cache {
     let index = 0;
     for (const data of this.#cache.entries()) {
       if (this.has(data[0])) {
-        callback({ [data[0]]: data[1] }, index);
+        callback({ [data[0]]: data[1].value }, index);
         index++;
       }
     }
@@ -239,7 +239,7 @@ module.exports = class Cache {
   *[Symbol.iterator]() {
     for (const data of this.#cache.entries()) {
       if (this.has(data[0])) {
-        yield { [data[0]]: data[1] };
+        yield { [data[0]]: data[1].value };
       }
     }
   }
