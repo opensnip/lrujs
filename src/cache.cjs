@@ -1,6 +1,3 @@
-const LinkedList = require("./linkedlist/index.cjs");
-const Node = require("./linkedlist/node.cjs");
-
 module.exports = class Cache {
   #linkedList = null;
   #cache = null;
@@ -65,8 +62,6 @@ module.exports = class Cache {
     this.#config.interval = options.interval;
     this.#config.enableInterval =
       options.interval > 0 ? options.enableInterval : false;
-
-    this.#linkedList = new LinkedList();
     this.#cache = new Map();
 
     // Automatically remove expires cache
@@ -89,7 +84,7 @@ module.exports = class Cache {
     options.ttl =
       typeof options.ttl === "number" ? options.ttl : this.#config.ttl;
 
-    const nodeValue = {
+    const node = {
       key: key,
       value: value,
       createdAt: Date.now(),
@@ -97,23 +92,23 @@ module.exports = class Cache {
       ttl: options.ttl,
       frequency: 0,
     };
-    if (nodeValue.ttl > 0) {
-      nodeValue.expiresAt = nodeValue.createdAt + nodeValue.ttl;
+    if (node.ttl > 0) {
+      node.expiresAt = node.createdAt + node.ttl;
     }
 
     // Update node data if node is already exists
     if (this.#cache.has(key)) {
       const existingNode = this.#cache.get(key);
-      existingNode.value = nodeValue;
+      existingNode.value = node.value;
       // Move current node to the head
-      this.#linkedList.setHead(existingNode);
+      this.#cache.delete(key);
+      this.#cache.set(key, existingNode);
     } else {
       // Remove node if cache is full
       if (this.length === this.#config.maxLength) {
         this.#evict();
       }
       // Create new node and make attach it to the head
-      const node = this.#linkedList.insertHead(nodeValue);
       this.#cache.set(key, node);
     }
   }
@@ -133,12 +128,13 @@ module.exports = class Cache {
         }
 
         // Move current node to the head
-        this.#linkedList.setHead(node);
+        this.#cache.delete(key);
+        this.#cache.set(key, node);
 
         if (callback) {
-          return callback(null, node.value.value);
+          return callback(null, node.value);
         } else {
-          return node.value.value;
+          return node.value;
         }
       }
 
@@ -154,8 +150,6 @@ module.exports = class Cache {
 
   delete(key) {
     if (this.#cache.has(key)) {
-      const node = this.#cache.get(key);
-      this.#linkedList.delete(node);
       // Delete node
       this.#cache.delete(key);
     }
@@ -164,12 +158,15 @@ module.exports = class Cache {
   #evict() {
     if (this.length === 0) return;
     if (this.length !== this.#config.maxLength) return;
-    this.delete(this.#linkedList.tail.value.key);
+
+    for (const key of this.#cache.keys()) {
+      this.delete(key);
+      break;
+    }
   }
 
   clear() {
     // Delete all data from cache
-    this.#linkedList.clear();
     this.#cache.clear();
   }
 
@@ -216,15 +213,12 @@ module.exports = class Cache {
       throw new TypeError("callback should be a function");
     }
 
-    let node = this.#linkedList.head;
     let index = 0;
-    while (node) {
-      let next = node.next;
-      if (this.has(node.value.key)) {
-        callback({ [node.value.key]: node.value.value }, index);
+    for (const data of this.#cache.entries()) {
+      if (this.has(data[0])) {
+        callback({ [data[0]]: data[1] }, index);
+        index++;
       }
-      node = next;
-      index++;
     }
   }
 
@@ -237,19 +231,16 @@ module.exports = class Cache {
   }
 
   #isStale(node) {
-    if (!node.value.expiresAt) return false;
-    return node.value.expiresAt - Date.now() <= 0;
+    if (!node.expiresAt) return false;
+    return node.expiresAt - Date.now() <= 0;
   }
 
   // Iterator to iterate over cache with a 'for...of' loop
   *[Symbol.iterator]() {
-    let node = this.#linkedList.head;
-    while (node) {
-      let next = node.next;
-      if (this.has(node.value.key)) {
-        yield { [node.value.key]: node.value.value };
+    for (const data of this.#cache.entries()) {
+      if (this.has(data[0])) {
+        yield { [data[0]]: data[1] };
       }
-      node = next;
     }
   }
 };
