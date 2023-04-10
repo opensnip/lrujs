@@ -1,5 +1,4 @@
 export default class Cache {
-  #linkedList = null;
   #cache = null;
   #config = {
     ttl: 0,
